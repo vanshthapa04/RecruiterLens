@@ -1,4 +1,4 @@
-const API_URL = "https://recruiter-lens-backend.onrender.com";
+const API_URL = "https://recruiter-lens-backend.onrender.com/api";
 
 export const analyzeResume = async (
   file: File,
