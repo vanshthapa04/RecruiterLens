@@ -1,5 +1,6 @@
 const pool = require('../../config/db');
 const path = require('path');
+const fs = require("fs");
 
 const { extractTextFromPDF } = require('../services/pdfService');
 
@@ -29,10 +30,20 @@ const uploadResume = async (req, res) => {
     );
 
     const extractedText =
-      await extractTextFromPDF(filePath);
+  await extractTextFromPDF(filePath);
 
-    const jobDescription =
-      req.body.jobDescription || '';
+
+fs.unlink(filePath, (err) => {
+  if (err) {
+    console.error(
+      "File delete error:",
+      err
+    );
+  }
+});
+
+const jobDescription =
+  req.body.jobDescription || '';
 
     const atsResult =
       calculateAtsScore(
