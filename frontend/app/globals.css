@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-canvas: #0f0d1a;
+  --color-panel: #1a1730;
+  --color-surface: #171426;
+  --color-border: #2e2a47;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-ink: #f2f0fa;
+  --color-ink-muted: #b4afc9;
+  --color-ink-faint: #6e6890;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-violet: #8b6fff;
+  --color-violet-dark: #6c4cff;
+  --color-coral: #ff7a68;
+  --color-amber: #ffc24d;
+  --color-emerald: #2fd98a;
+  --color-rose: #ff6b61;
+
+  --font-display: var(--font-sora), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-mono: var(--font-plex-mono), monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.perforate {
+  position: relative;
+  border-top: 2px dashed var(--color-border);
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+}
+
+.perforate::before,
+.perforate::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  background: var(--color-canvas);
+  border-radius: 9999px;
+}
+
+.perforate::before {
+  left: -10px;
+}
+
+.perforate::after {
+  right: -10px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stamp-in {
+    animation: stamp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+}
+
+@keyframes stamp {
+  0% {
+    transform: scale(1.6) rotate(-14deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(-8deg);
+    opacity: 1;
+  }
 }

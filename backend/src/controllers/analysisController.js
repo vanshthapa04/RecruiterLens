@@ -6,11 +6,16 @@ const { extractTextFromPDF } = require('../services/pdfService');
 
 const {
   calculateAtsScore,
+  combineScores,
 } = require('../services/atsService');
 
 const {
   generateRecommendations,
 } = require('../services/aiService');
+
+const {
+  calculateSemanticScore,
+} = require('../services/semanticService');
 
 const uploadResume = async (req, res) => {
   try {
@@ -51,6 +56,33 @@ const jobDescription =
         jobDescription
       );
 
+    let semanticScore = null;
+    let requirementBreakdown = [];
+
+    try {
+      const semanticResult =
+        await calculateSemanticScore(
+          extractedText,
+          jobDescription
+        );
+
+      semanticScore = semanticResult.semanticScore;
+      requirementBreakdown = semanticResult.requirementBreakdown;
+    } catch (semanticError) {
+      console.error(
+        'Semantic scoring failed, falling back to keyword score only:',
+        semanticError
+      );
+
+      semanticScore = atsResult.score;
+      requirementBreakdown = [];
+    }
+
+    const finalScore = combineScores(
+      atsResult.score,
+      semanticScore
+    );
+
     const recommendations =
       await generateRecommendations({
         resumeText: extractedText,
@@ -81,7 +113,7 @@ const jobDescription =
       [
         file.filename,
         extractedText,
-        atsResult.score,
+        finalScore,
         atsResult.missingKeywords.join(', '),
       ]
     );
@@ -90,13 +122,20 @@ const jobDescription =
       success: true,
 
       atsScore:
+        finalScore,
+
+      keywordScore:
         atsResult.score,
+
+      semanticScore,
 
       matchedKeywords:
         atsResult.matchedKeywords,
 
       missingKeywords:
         atsResult.missingKeywords,
+
+      requirementBreakdown,
 
       recommendations,
 

@@ -174,8 +174,12 @@ const calculateAtsScore = (
   
     return recommendations;
   };
+  const combineScores = (keywordScore, semanticScore) => {
+    return Math.round(keywordScore * 0.4 + semanticScore * 0.6);
+  };
   
   module.exports = {
     calculateAtsScore,
     generateRecommendations,
+    combineScores,
 };

@@ -10,59 +10,39 @@ export default function JobDescription({
   setJobDescription,
 }: JobDescriptionProps) {
   return (
-<div
-  className="
-  bg-white/90
-  backdrop-blur-sm
-  border
-  border-blue-100
-  rounded-2xl
-  p-8
-  h-full
-  shadow-lg
-  "
->
-      <h2 className="text-2xl font-bold text-gray-800 mb-2">
-        💼 Job Description
-      </h2>
+    <div className="bg-surface border-2 border-border rounded-[28px] p-7 h-full flex flex-col shadow-[0_2px_0_0_var(--color-border)]">
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="font-display font-bold text-ink text-xl">
+          The Job Post
+        </h2>
+        <span className="font-mono text-[11px] px-2 py-1 rounded-full bg-coral/10 text-coral">
+          02
+        </span>
+      </div>
 
-      <p className="text-gray-500 mb-6">
-        Paste the job description to compare it
-        with your resume.
+      <p className="text-ink-muted text-sm mb-6">
+        Paste the full posting so we catch every requirement.
       </p>
 
       <textarea
         value={jobDescription}
-        onChange={(e) =>
-          setJobDescription(e.target.value)
-        }
+        onChange={(e) => setJobDescription(e.target.value)}
         placeholder="Paste the complete job description here..."
         className="
-        w-full
-        h-72
-        resize-none
-        rounded-2xl
-        border
-        border-gray-200
+        flex-1 w-full resize-none
+        bg-panel
+        rounded-2xl border-2 border-border
         p-4
-        text-gray-700
-        bg-white
-        focus:outline-none
-        focus:ring-2
-        focus:ring-blue-500
-        focus:border-blue-500
-        transition-all
+        text-ink text-sm leading-relaxed
+        placeholder:text-ink-faint
+        focus:outline-none focus:border-violet focus:bg-white
+        transition-colors
         "
       />
 
-      <div className="flex justify-between mt-4 text-sm text-gray-500">
-        <span>
-          Paste complete job requirements
-        </span>
-
-        <span>
-          {jobDescription.length} characters
-        </span>
+      <div className="flex justify-between mt-3 font-mono text-xs text-ink-faint">
+        <span>Requirements, responsibilities, all of it</span>
+        <span>{jobDescription.length} chars</span>
       </div>
     </div>
   );

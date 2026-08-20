@@ -8,6 +8,23 @@ import Results from "./components/Results";
 
 import { analyzeResume } from "./services/api";
 
+interface RequirementBreakdownItem {
+  requirement: string;
+  similarity: number;
+  matched: boolean;
+}
+
+interface AnalysisResult {
+  atsScore: number;
+  keywordScore: number;
+  semanticScore: number;
+  matchedKeywords: string[];
+  missingKeywords: string[];
+  requirementBreakdown: RequirementBreakdownItem[];
+  recommendations: string;
+  data: any;
+}
+
 export default function Home() {
   const [selectedFile, setSelectedFile] =
     useState<File | null>(null);
@@ -15,7 +32,8 @@ export default function Home() {
   const [jobDescription, setJobDescription] =
     useState("");
 
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] =
+    useState<AnalysisResult | null>(null);
 
   const [loading, setLoading] =
     useState(false);
@@ -55,154 +73,45 @@ export default function Home() {
   };
 
   return (
-    <main
-      className="
-      relative
-      overflow-hidden
-      min-h-screen
-      bg-gradient-to-br
-      from-sky-50
-      via-indigo-50
-      to-purple-100
-      p-6
-      md:p-10
-      "
-    >
-
-      {/* Background Blobs */}
-
-      <div
-        className="
-        absolute
-        top-[-120px]
-        left-[-120px]
-        w-[400px]
-        h-[400px]
-        bg-blue-400/20
-        rounded-full
-        blur-3xl
-        "
-      />
-
-      <div
-        className="
-        absolute
-        top-[150px]
-        right-[-100px]
-        w-[350px]
-        h-[350px]
-        bg-purple-400/20
-        rounded-full
-        blur-3xl
-        "
-      />
-
-      <div
-        className="
-        absolute
-        bottom-[-100px]
-        left-[30%]
-        w-[350px]
-        h-[350px]
-        bg-cyan-400/20
-        rounded-full
-        blur-3xl
-        "
-      />
-
-      <div className="relative z-10 max-w-6xl mx-auto">
-
-        {/* Hero */}
-
-        <div className="text-center mb-12">
-
-          <div
-            className="
-            inline-flex
-            items-center
-            px-5
-            py-2
-            rounded-full
-            bg-white/80
-            backdrop-blur-sm
-            shadow-md
-            text-blue-700
-            font-medium
-            mb-6
-            "
-          >
-            🚀 AI-Powered ATS Resume Analyzer
+    <main className="min-h-screen bg-canvas">
+      <header className="border-b-2 border-border">
+        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-violet rotate-[-6deg] flex items-center justify-center">
+              <span className="text-white font-display font-bold text-sm rotate-[6deg]">
+                R
+              </span>
+            </div>
+            <span className="font-display font-bold text-ink">
+              RecruiterLens
+            </span>
           </div>
 
-          <h1
-            className="
-            text-5xl
-            md:text-6xl
-            font-extrabold
-            text-gray-900
-            "
-          >
-            RecruiterLens
+          <span className="font-mono text-[11px] text-ink-faint hidden sm:block">
+            your resume, screened before they see it
+          </span>
+        </div>
+      </header>
+
+      <div className="max-w-6xl mx-auto px-6">
+
+        <section className="pt-16 pb-12 text-center">
+          <span className="inline-block font-mono text-xs px-3 py-1.5 rounded-full bg-amber/15 text-amber-700 mb-5">
+            🎟️ every application is a ticket — let's punch it
+          </span>
+
+          <h1 className="font-display text-4xl md:text-6xl font-bold text-ink leading-[1.1] max-w-3xl mx-auto">
+            Will your resume make it{" "}
+            <span className="text-violet">past the bot?</span>
           </h1>
 
-          <p
-            className="
-            text-lg
-            md:text-xl
-            text-gray-600
-            mt-4
-            max-w-3xl
-            mx-auto
-            "
-          >
-            Optimize your resume for ATS systems,
-            identify missing skills, and improve
-            your chances of landing interviews.
+          <p className="text-ink-muted text-lg mt-5 max-w-xl mx-auto leading-relaxed">
+            Upload your resume and the job post — get a
+            requirement-by-requirement breakdown, not just a score.
           </p>
+        </section>
 
-        </div>
-
-        {/* Feature Pills */}
-
-        <div
-          className="
-          flex
-          flex-wrap
-          justify-center
-          gap-4
-          mb-12
-          "
-        >
-
-          {[
-            "✅ ATS Scoring",
-            "🎯 Skill Matching",
-            "📄 Resume Parsing",
-            "🤖 AI Feedback",
-          ].map((item) => (
-            <div
-              key={item}
-              className="
-              bg-white/80
-              backdrop-blur-sm
-              px-5
-              py-3
-              rounded-full
-              shadow-md
-              font-medium
-              text-gray-700
-              "
-            >
-              {item}
-            </div>
-          ))}
-
-        </div>
-
-        {/* Input Section */}
-
-        <div className="grid lg:grid-cols-2 gap-8">
-
+        <div className="grid lg:grid-cols-2 gap-6">
           <ResumeUpload
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
@@ -214,51 +123,54 @@ export default function Home() {
               setJobDescription
             }
           />
-
         </div>
 
-        {/* Analyze Button */}
-
-        <div className="mt-10 text-center">
-
+        <div className="mt-10 flex justify-center">
           <button
             onClick={handleAnalyze}
             disabled={loading}
             className="
-            bg-gradient-to-r
-            from-blue-600
-            to-indigo-600
-            hover:from-blue-700
-            hover:to-indigo-700
-            disabled:bg-gray-400
-            text-white
-            font-semibold
-            px-12
-            py-4
-            rounded-2xl
-            shadow-lg
-            transition-all
-            duration-300
-            hover:scale-105
+            group inline-flex items-center gap-3
+            bg-violet text-white
+            disabled:bg-ink-faint disabled:cursor-not-allowed
+            font-display font-semibold
+            px-9 py-4 rounded-2xl
+            shadow-[0_4px_0_0_var(--color-violet-dark)]
+            enabled:hover:translate-y-[2px] enabled:hover:shadow-[0_2px_0_0_var(--color-violet-dark)]
+            active:translate-y-[4px] active:shadow-none
+            transition-all duration-150
+            focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet/30
             "
           >
-            {loading
-              ? "Analyzing..."
-              : "Analyze Resume"}
+            {loading ? (
+              <>
+                <span className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+                Scanning your resume
+              </>
+            ) : (
+              <>
+                Punch My Ticket
+                <span className="transition-transform group-hover:translate-x-0.5">
+                  →
+                </span>
+              </>
+            )}
           </button>
-
         </div>
-
-        {/* Results */}
 
         {result && (
           <Results
             atsScore={result.atsScore}
+            keywordScore={result.keywordScore}
+            semanticScore={result.semanticScore}
             matchedKeywords={
               result.matchedKeywords
             }
             missingKeywords={
               result.missingKeywords
+            }
+            requirementBreakdown={
+              result.requirementBreakdown
             }
             recommendations={
               result.recommendations
@@ -266,8 +178,13 @@ export default function Home() {
           />
         )}
 
-      </div>
+        <footer className="py-16 mt-10 text-center">
+          <p className="font-mono text-xs text-ink-faint">
+            RecruiterLens — built by Vansh Thapa
+          </p>
+        </footer>
 
+      </div>
     </main>
   );
 }
