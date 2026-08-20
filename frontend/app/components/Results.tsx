@@ -36,21 +36,21 @@ const BAND = {
   strong: {
     label: "Strong Match",
     stamp: "CLEARED",
-    hex: "#12b76a",
+    hex: "#2fd98a",
     chip: "bg-emerald/10 text-emerald border-emerald/25",
     stampColor: "border-emerald text-emerald",
   },
   moderate: {
     label: "Moderate Match",
     stamp: "REVIEW",
-    hex: "#ffb020",
-    chip: "bg-amber/15 text-amber-700 border-amber/30",
-    stampColor: "border-amber text-amber-600",
+    hex: "#ffc24d",
+    chip: "bg-amber/15 text-amber border-amber/30",
+    stampColor: "border-amber text-amber",
   },
   low: {
     label: "Needs Work",
     stamp: "RESUBMIT",
-    hex: "#f04438",
+    hex: "#ff6b61",
     chip: "bg-rose/10 text-rose border-rose/25",
     stampColor: "border-rose text-rose",
   },
@@ -100,14 +100,14 @@ export default function Results({
               text={`${atsScore}%`}
               styles={buildStyles({
                 pathColor: band.hex,
-                textColor: "#1c1730",
-                trailColor: "#f3f0ff",
+                textColor: "#f2f0fa",
+                trailColor: "#2e2a47",
                 textSize: "17px",
               })}
             />
 
             <div
-              className={`stamp-in absolute -top-3 -right-3 w-20 h-20 rounded-full border-4 border-dashed flex items-center justify-center bg-white/90 backdrop-blur-sm rotate-[-8deg] ${band.stampColor}`}
+              className={`stamp-in absolute -top-3 -right-3 w-20 h-20 rounded-full border-4 border-dashed flex items-center justify-center bg-surface/90 backdrop-blur-sm rotate-[-8deg] ${band.stampColor}`}
             >
               <span className="font-display font-extrabold text-[11px] tracking-wide text-center leading-tight">
                 {band.stamp}
@@ -243,7 +243,7 @@ export default function Results({
               <div
                 key={index}
                 className={`flex items-center gap-4 rounded-2xl pl-4 pr-4 py-3 ${
-                  item.matched ? "bg-emerald/5" : "bg-rose/5"
+                  item.matched ? "bg-emerald/10" : "bg-rose/10"
                 }`}
               >
                 <span
@@ -272,7 +272,7 @@ export default function Results({
       <motion.div
         variants={fadeUp}
         transition={{ duration: 0.5 }}
-        className="perforate bg-violet/5 border-2 border-violet/20 rounded-[24px] p-6"
+        className="perforate bg-violet/10 border-2 border-violet/25 rounded-[24px] p-6"
       >
         <h3 className="font-display font-bold text-ink mb-5">
           🎯 What To Fix
@@ -282,7 +282,7 @@ export default function Results({
           {recommendationList.map((recommendation, index) => (
             <div
               key={index}
-              className="flex gap-4 bg-white border border-violet/15 rounded-2xl p-4"
+              className="flex gap-4 bg-surface border border-violet/25 rounded-2xl p-4"
             >
               <span className="font-display font-bold text-violet shrink-0">
                 {String(index + 1).padStart(2, "0")}

@@ -120,9 +120,11 @@ const calculateAtsScore = (
         "agile",
         "scrum",
     ];
-    const jdKeywords = commonSkills.filter((skill) =>
-      jd.includes(skill)
-    );
+    const jdKeywords = commonSkills.filter((skill) => {
+      const escapedSkill = skill.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const pattern = new RegExp(`\\b${escapedSkill}\\b`, "i");
+      return pattern.test(jd);
+    });
   
     const matchedKeywords = [];
     const missingKeywords = [];

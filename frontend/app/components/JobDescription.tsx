@@ -35,7 +35,7 @@ export default function JobDescription({
         p-4
         text-ink text-sm leading-relaxed
         placeholder:text-ink-faint
-        focus:outline-none focus:border-violet focus:bg-white
+        focus:outline-none focus:border-violet focus:bg-panel
         transition-colors
         "
       />
