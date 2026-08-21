@@ -17,6 +17,10 @@ const {
   calculateSemanticScore,
 } = require('../services/semanticService');
 
+const {
+  rewriteResume,
+} = require('../services/resumeRewriteService');
+
 const uploadResume = async (req, res) => {
   try {
     const file = req.file;
@@ -155,6 +159,41 @@ const jobDescription =
   }
 };
 
+const rewriteResumeHandler = async (req, res) => {
+  try {
+    const { resumeText, jobDescription, missingKeywords } = req.body;
+
+    if (!resumeText || !jobDescription) {
+      return res.status(400).json({
+        success: false,
+        message: 'resumeText and jobDescription are required',
+      });
+    }
+
+    const resume = await rewriteResume({
+      resumeText,
+      jobDescription,
+      missingKeywords: missingKeywords || [],
+    });
+
+    res.status(200).json({
+      success: true,
+      resume,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: 'Resume rewrite failed',
+    });
+
+  }
+};
+
 module.exports = {
   uploadResume,
+  rewriteResumeHandler,
 };

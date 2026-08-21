@@ -20,6 +20,8 @@ interface ResultsProps {
   missingKeywords: string[];
   requirementBreakdown?: RequirementBreakdownItem[];
   recommendations: string;
+  resumeText: string;
+  jobDescription: string;
 }
 
 const fadeUp = {
@@ -64,6 +66,8 @@ export default function Results({
   missingKeywords,
   requirementBreakdown,
   recommendations,
+  resumeText,
+  jobDescription,
 }: ResultsProps) {
   const band =
     atsScore >= 80 ? BAND.strong : atsScore >= 60 ? BAND.moderate : BAND.low;
@@ -78,6 +82,18 @@ export default function Results({
   const recommendationList = recommendations
     .split("\n")
     .filter((item) => item.trim() !== "");
+
+  const handleRewrite = () => {
+    sessionStorage.setItem(
+      "rewriteInput",
+      JSON.stringify({
+        resumeText,
+        jobDescription,
+        missingKeywords,
+      })
+    );
+    window.location.href = "/rewrite";
+  };
 
   return (
     <motion.div
@@ -293,6 +309,21 @@ export default function Results({
             </div>
           ))}
         </div>
+      </motion.div>
+
+      {/* Rewrite CTA */}
+
+      <motion.div
+        variants={fadeUp}
+        transition={{ duration: 0.5 }}
+        className="perforate text-center"
+      >
+        <button
+          onClick={handleRewrite}
+          className="font-display font-semibold px-8 py-4 rounded-2xl bg-violet text-white shadow-[0_4px_0_0_var(--color-violet-dark)] hover:translate-y-[2px] hover:shadow-[0_2px_0_0_var(--color-violet-dark)] active:translate-y-[4px] active:shadow-none transition-all duration-150"
+        >
+          ✍️ Rewrite My Resume For This Job
+        </button>
       </motion.div>
     </motion.div>
   );

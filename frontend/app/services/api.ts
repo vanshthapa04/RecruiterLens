@@ -22,3 +22,26 @@ export const analyzeResume = async (
 
   return response.json();
 };
+
+export const rewriteResume = async (
+  resumeText: string,
+  jobDescription: string,
+  missingKeywords: string[]
+) => {
+  const response = await fetch(
+    `${API_URL}/rewrite`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        resumeText,
+        jobDescription,
+        missingKeywords,
+      }),
+    }
+  );
+
+  return response.json();
+};

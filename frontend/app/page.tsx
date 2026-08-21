@@ -160,6 +160,8 @@ export default function Home() {
 
         {result && (
           <Results
+          resumeText={result.data.extracted_text}
+          jobDescription={jobDescription}
             atsScore={result.atsScore}
             keywordScore={result.keywordScore}
             semanticScore={result.semanticScore}
